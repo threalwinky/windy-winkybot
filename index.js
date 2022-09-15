@@ -1,8 +1,11 @@
 const {Client, MessageEmbed} = require('discord.js')
-const client = new Client()
+const client = new Client({
+    disableMentions: "everyone",
+    restTimeOffset: 0
+})
 const {token} = require("./config.json")
-
-getCMD = (n) => n.slice(1)
+const {prefix} = require("./config.json")
+getCMD = (n) => n.slice(1).toLowerCase()
 splitCMD = (n) => n.split(' ')
 
 
@@ -19,7 +22,8 @@ client.on("ready", () => {
 })
 
 client.on("message", msg => {
-    if (msg.content.substring(0, 1) === "*"){
+    if (msg.content.substring(0, 1) === prefix){
+    
         args = splitCMD(msg.content)
         cmd = getCMD(msg.content)
         //msg.channel.send(cmd)
@@ -29,6 +33,7 @@ client.on("message", msg => {
                 break;
             case "avatar":
                 member = msg.mentions.members.first() || msg.guild.members.cache.get(args[0]) || msg.member
+                console.log(member)
                 URL = member.user.avatarURL({ format : 'jpg', dynamic : true, size : 1024})
                 avatarEmbed = new MessageEmbed()
                     .setImage(URL)
