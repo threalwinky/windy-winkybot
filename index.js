@@ -1,44 +1,44 @@
-require('dotenv').config()
-
-const token = process.env.token //get Token from environment
-const {wbot} = require('./src/client.js') // create new client
-const {prefix} = require('./config.json') // get prefix
-const { getURLVideoID } = require('ytdl-core')
-getCMD = (n) => n.slice(1).toLowerCase()
-splitCMD = (n) => n.split(' ')
-getURL = (a, b) => "https://cdn.discordapp.com/avatars/"+ a +"/"+ b +".jpeg"
-wbot.on('ready', () => {
-    console.log(`${wbot.user.username} đang hoạt động`)
-    wbot.user.setPresence({ 
-        activities: [{
-            name : " game with winky!!!"
-        }]
-    });
-    wbot.user.setStatus('online')
+        
+require("dotenv").config()
+const { Client, GatewayIntentBits, Partials, messageLink , EmbedBuilder } = require('discord.js');
+const client = new Client({
+    intents: [
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildBans,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildInvites,
+        GatewayIntentBits.GuildVoiceStates,
+    ],
+    partials: [
+        Partials.Channel,
+        Partials.User,
+        Partials.Role,
+        Partials.Emoji,
+        Partials.Invite,
+        Partials.Message,
+        Partials.GuildMember,
+        Partials.ThreadMember,
+        Partials.StageInstance,
+        Partials.ThreadChannel,
+    ]
 })
+const { TOKEN } = process.env.TOKEN
 
-wbot.on('messageCreate', msg => {
-    if (msg.content.substring(0, 1) === prefix){
-        args = splitCMD(msg.content)
-        cmd = getCMD(msg.content)
-        //msg.channel.send(cmd)
-        //console.log(msg.member)
-        msg.react('✨')
-        switch (cmd) {
-            case "ping":
-                msg.reply("Pong !! " + wbot.ws.ping + " ms")
-                break;
-            case "avatar":
-                
-                msg.reply('Your avatar here, onii - chan')
-                msg.channel.send()
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`)
+    client.user.setActivity(`with ${client.guilds.cache.size} guild(s)`)
 
-
-                break
-            default :
-                break
-        }
+})
+client.on('messageCreate', async message => {
+    const { prefix } = "w!"
+    
+    if (message.content.toLowerCase().startsWith(prefix)) {
+        const args = message.content.slice(prefix.length).trim().split(' ')
+        const cmd = args.shift().toLowerCase()
+        if (cmd === 'ping') message.reply(`🏓 Pong !!! Your ping is *${client.ws.ping}*`)
     }
 })
 
-wbot.login(token) // Log in to Discord with bot token
+client.login(TOKEN)

@@ -1,27 +1,24 @@
 {
   "name": "windy",
   "version": "1.0.0",
-  "description": "winkybot",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "winky",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.8.0",
-    "@discordjs/voice": "^0.11.0",
-    "discord.js": "^14.3.0",
-    "dotenv": "^16.0.2",
+    "@discordjs/voice": "^0.13.0",
+    "@distube/soundcloud": "^1.2.2",
+    "@distube/spotify": "^1.4.2",
+    "@distube/yt-dlp": "^1.1.3",
+    "discord.js": "^14.6.0",
+    "distube": "^4.0.4",
     "ffmpeg-static": "^5.1.0",
-    "libsodium-wrappers": "^0.7.10",
-    "module-alias": "^2.2.2",
-    "moment": "^2.29.4",
-    "reconlx": "^2.5.6",
-    "scdl-core": "^1.1.0",
-    "ytdl-core": "^4.11.2",
-    "ytpl": "^2.3.0",
-    "ytsr": "^3.8.0"
+    "sodium": "^3.0.2"
   }
 }
