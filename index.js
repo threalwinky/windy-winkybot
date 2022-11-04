@@ -1,5 +1,4 @@
         
-require("dotenv").config()
 const { Client, GatewayIntentBits, Partials, messageLink , EmbedBuilder } = require('discord.js');
 const client = new Client({
     intents: [
