@@ -46,8 +46,6 @@ client.distube = new DisTube(client, {
         new YtDlpPlugin()
     ]
 })
-//set dir
-
 
 const commands = [
     {
