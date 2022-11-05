@@ -11,6 +11,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    
+    "discord.js": "^14.6.0"
   }
 }
