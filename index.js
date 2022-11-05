@@ -60,7 +60,7 @@ const commands = [
     }
 ];
 
-const rest = new REST({ version: '10' }).setToken(TOKEN);
+const rest = new REST({ version: '10' }).setToken(process.env['TOKEN']);
 
 (async () => {
   try {
