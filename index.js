@@ -23,8 +23,7 @@ const client = new Client({
         Partials.ThreadChannel,
     ]
 })
-const { TOKEN } = process.env['TOKEN']
 
 
 
-client.login(TOKEN)
+client.login(process.env['TOKEN'])
