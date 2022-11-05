@@ -31,7 +31,7 @@ const fs = require('fs')
 const { SpotifyPlugin } = require('@distube/spotify')
 const { SoundCloudPlugin } = require('@distube/soundcloud')
 const { YtDlpPlugin } = require('@distube/yt-dlp')
-
+require('dotenv').config()
 
 client.distube = new DisTube(client, {
     leaveOnStop: false,
@@ -117,7 +117,7 @@ client.on('interactionCreate', async interaction => {
         await interaction.reply(`🏓Pong !!! \`${client.ws.ping} ms\``);
     }
     else if (interaction.commandName === 'play') {
-
+        
     }
 });
   
