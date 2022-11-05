@@ -1,6 +1,6 @@
         
 
-const { Client, GatewayIntentBits, Partials , EmbedBuilder } = require('discord.js');
+const { Client, GatewayIntentBits, Partials, messageLink , EmbedBuilder } = require('discord.js');
 const client = new Client({
     intents: [
         GatewayIntentBits.DirectMessages,
@@ -24,7 +24,6 @@ const client = new Client({
         Partials.ThreadChannel,
     ]
 })
-const { TOKEN } = require('./config.json')
 const { REST, Routes } = require('discord.js');
 
 const { DisTube } = require('distube')
