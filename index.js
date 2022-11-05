@@ -1,6 +1,6 @@
         
 
-const { Client, GatewayIntentBits, Partials, messageLink , EmbedBuilder } = require('discord.js');
+const { Client, GatewayIntentBits, Partials , EmbedBuilder } = require('discord.js');
 const client = new Client({
     intents: [
         GatewayIntentBits.DirectMessages,
