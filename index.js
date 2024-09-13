@@ -59,7 +59,7 @@ const commands = [
 	new SlashCommandBuilder().setName('user').setDescription('Replies with user info!'),
 ]
 	.map(command => command.toJSON());
-console.log(commands)
+// console.log(commands)
 // const commands = [
 //     {
 //         name: 'ping',
