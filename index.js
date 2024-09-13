@@ -1,124 +1,119 @@
-        
-
-const { Client, GatewayIntentBits, Partials, messageLink , EmbedBuilder } = require('discord.js');
-const client = new Client({
-    intents: [
-        GatewayIntentBits.DirectMessages,
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildBans,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildInvites,
-        GatewayIntentBits.GuildVoiceStates,
-    ],
-    partials: [
-        Partials.Channel,
-        Partials.User,
-        Partials.Role,
-        Partials.Emoji,
-        Partials.Invite,
-        Partials.Message,
-        Partials.GuildMember,
-        Partials.ThreadMember,
-        Partials.StageInstance,
-        Partials.ThreadChannel,
-    ]
-})
-const { REST, Routes } = require('discord.js');
-
-const { DisTube } = require('distube')
+const dotenv = require ("dotenv")
 const fs = require('fs')
-const { SpotifyPlugin } = require('@distube/spotify')
-const { SoundCloudPlugin } = require('@distube/soundcloud')
-const { YtDlpPlugin } = require('@distube/yt-dlp')
-require('dotenv').config()
+const {
+    Discord,
+    Client,
+    AttachmentBuilder,
+    EmbedBuilder,
+    GatewayIntentBits,
+    Collection,
+    Partials,
+    ActivityType,
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    StringSelectMenuOptionBuilder,
+    StringSelectMenuBuilder,
+    REST,
+    Routes,
+    SlashCommandBuilder
+} = require('discord.js');
+const moment = require('moment')
 
-client.distube = new DisTube(client, {
-    leaveOnStop: false,
-    emitNewSongOnly: true,
-    emitAddSongWhenCreatingQueue: false,
-    emitAddListWhenCreatingQueue: false,
-    plugins: [
-        new SpotifyPlugin({
-        emitEventsAfterFetching: true
-        }),
-        new SoundCloudPlugin(),
-        new YtDlpPlugin()
-    ]
-})
+dotenv.config()
 
+const client = new Client({
+    partials: [Partials.Message, Partials.Channel, Partials.Reaction],
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildWebhooks,
+        GatewayIntentBits.GuildInvites,
+        GatewayIntentBits.GuildPresences,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.DirectMessageTyping,
+    ],
+
+});
+
+const TOKEN = process.env.TOKEN
+const prefix = process.env.prefix
+const SERVER_ID = process.env.SERVER_ID
+
+const rest = new REST({ version: '10' }).setToken(TOKEN)
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+// const commands = [];
+client.commands = new Collection();
+// for (const file of commandFiles) {
+//     const command = require(`./commands/${file}`);
+//     commands.push(command.data.toJSON());
+//     client.commands.set(command.data.name, command);
+// }
 const commands = [
-    {
-        name: 'ping',
-        description: 'Replies with Pong!',
-    },
-    {
-        name: 'play',
-        description: 'Plays a song',
-    }
-];
-
-const rest = new REST({ version: '10' }).setToken(process.env['TOKEN']);
-
-(async () => {
-  try {
-    console.log('Started refreshing application (/) commands.');
-
-    await rest.put(Routes.applicationCommands("1035866350758920203"), { body: commands });
-
-    console.log('Successfully reloaded application (/) commands.');
-  } catch (error) {
-    console.error(error);
-  }
-})();
+	new SlashCommandBuilder().setName('ping').setDescription('Replies with pong!'),
+	new SlashCommandBuilder().setName('server').setDescription('Replies with server info!'),
+	new SlashCommandBuilder().setName('user').setDescription('Replies with user info!'),
+]
+	.map(command => command.toJSON());
+console.log(commands)
+// const commands = [
+//     {
+//         name: 'ping',
+//         description: 'Replies with Pong!',
+//     },
+//     {
+//         name: 'play',
+//         description: 'Plays a song',
+//     }
+// ];
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`)
     client.user.setActivity(`with ${client.guilds.cache.size} guild(s)`);
 });
+
 client.on('messageCreate', async message => {
-    const { prefix } = require('./config.json')
-    
-    if (message.content.toLowerCase().startsWith(prefix)) {
-        const args = message.content.slice(prefix.length).trim().split(' ')
-        const cmd = args.shift().toLowerCase()
-        if (cmd === 'ping') message.reply(`🏓 Pong !!! Your ping is *${client.ws.ping}*`)
-        else if (cmd === 'say'){
-            if (message.deletable) message.delete()
-            message.channel.send(args.join(' '))
-        }
-        else if (cmd === 'avatar'){
-            const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member
-            const avatarURL = member.displayAvatarURL({
-                format : 'png',
-                size : 4096,
-                dynamic : true,
-            })
-            const embed = new EmbedBuilder()
-                .setImage(avatarURL)
-                .setTitle(`Here is what you want, onii-chan`)
-                .setColor('Green')
-            message.reply({ embeds : [embed] })
-        }
-        else if (cmd === 'play'){
-            const string = args.join(' ')
-            if (!string) return message.react('❌') && message.channel.send(`\`Please enter a song url or query to search.\``)
-            client.distube.play(message.member.voice.channel, string, {
-                member: message.member,
-                textChannel: message.channel,
-                message
-            })
+    if (message.content.toLowerCase().startsWith(prefix)){
+        const args = message.content.split(prefix)
+        const cmd = args[1]
+        if (cmd.startsWith("ping")){
+            message.channel.send("Pong")
         }
     }
+})
+
+client.once('ready', () => {
+
+    const CLIENT_ID = client.user.id;
+    (async () => {
+        try {
+          console.log('Started refreshing application (/) commands.');
+      
+          await rest.put(Routes.applicationGuildCommands("1284204848031465492", SERVER_ID), { body: commands });
+      
+          console.log('Successfully reloaded application (/) commands.');
+        } catch (error) {
+          console.error(error);
+        }
+      })();
 
 })
+
 client.on('interactionCreate', async interaction => {
-    if (!interaction.isChatInputCommand()) return;
-    if (interaction.commandName === 'ping') {
-        await interaction.reply(`🏓Pong !!! \`${client.ws.ping} ms\``);
-    }
-    else if (interaction.commandName === 'play') {
-        
-    }
+	if (!interaction.isCommand()) return;
+
+	const { commandName } = interaction;
+
+	if (commandName === 'ping') {
+		await interaction.reply('Pong!');
+	} else if (commandName === 'server') {
+		await interaction.reply(`Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`);
+	} else if (commandName === 'user') {
+		await interaction.reply('User info.');
+	}
 });
-  
-client.login(process.env['TOKEN']);
+
+client.login(TOKEN);
