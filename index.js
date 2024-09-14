@@ -1,5 +1,6 @@
 const dotenv = require ("dotenv")
 const fs = require('fs')
+const keepAlive = require("./server")
 const {
     Discord,
     Client,
@@ -115,5 +116,5 @@ client.on('interactionCreate', async interaction => {
 		await interaction.reply('User info.');
 	}
 });
-
+keepAlive()
 client.login(TOKEN);
