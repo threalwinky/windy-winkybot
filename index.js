@@ -83,6 +83,13 @@ client.on('messageCreate', async message => {
         if (cmd.startsWith("ping")){
             message.channel.send("Pong")
         }
+        else if (cmd.startsWith("say")){
+            // console.log(message)
+            // message.channel.reply("OK")
+            // console.log(args[1])
+            const say = args[1].split("say ")[1]
+            message.reply(say);
+        }
     }
 })
 
